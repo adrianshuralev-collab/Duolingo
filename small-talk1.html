@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 1: Small Talk</title>
+    <style>
+        :root {
+            --bg-color: #f7f7f7;
+            --card-bg: #ffffff;
+            --text-main: #3c3c3c;
+            --accent-color: #1cb0f6;
+            --secondary-color: #58cc02;
+            --messenger-bg: #e5ddd5;
+            --bubble-out: #dcf8c6;
+            --bubble-in: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Шапка и Прогресс-бар */
+        header {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            z-index: 10;
+        }
+
+        .close-btn {
+            text-decoration: none;
+            font-size: 24px;
+            color: #afafaf;
+            font-weight: bold;
+        }
+
+        .progress-container {
+            flex-grow: 1;
+            height: 16px;
+            background-color: #e5e5e5;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 33%; /* Первый урок из трех, например */
+            height: 100%;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        /* Контент */
+        main {
+            width: 90%;
+            max-width: 600px;
+            padding-bottom: 100px;
+        }
+
+        h1 { font-size: 24px; margin: 20px 0; }
+        h2 { font-size: 18px; color: var(--accent-color); margin-top: 30px; }
+
+        .theory-card {
+            background: var(--card-bg);
+            border: 2px solid #e5e5e5;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .rule-icon {
+            background: #f1f7ff;
+            padding: 8px;
+            border-radius: 50%;
+            font-size: 20px;
+        }
+
+        /* Стили мессенджера */
+        .messenger-container {
+            background-color: var(--messenger-bg);
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); /* Типовой паттерн WhatsApp */
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .chat-label {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 15px;
+            line-height: 1.4;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .bubble.sent {
+            align-self: flex-end;
+            background-color: var(--bubble-out);
+            border-bottom-right-radius: 2px;
+        }
+
+        .bubble.received {
+            align-self: flex-start;
+            background-color: var(--bubble-in);
+            border-bottom-left-radius: 2px;
+        }
+
+        .author-name {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: block;
+            color: #2b7d5c;
+        }
+
+        /* Кнопка "Далее" */
+        .footer-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            border-top: 2px solid #e5e5e5;
+            padding: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .next-btn {
+            width: 80%;
+            max-width: 400px;
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #46a302;
+            transition: all 0.1s;
+        }
+
+        .next-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 transparent;
+        }
+
+        .taboo-tag {
+            display: inline-block;
+            background: #ffeded;
+            color: #eb5757;
+            padding: 4px 10px;
+            border-radius: 8px;
+            margin: 4px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="close-btn">✕</a>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <h1>Золотые правила Small Talk</h1>
+        
+        <div class="theory-card">
+            <p>Small talk — это не «бессмысленный треп», а <b>социальный клей</b>. Задача: перекинуться парой фраз, чтобы снизить градус напряжения.</p>
+            
+            <div class="rule-item">
+                <div class="rule-icon">⚖️</div>
+                <div><strong>Правило 20/80:</strong> Больше слушай, меньше говори.</div>
+            </div>
+
+            <div class="rule-item">
+                <div class="rule-icon">⚓</div>
+                <div>
+                    <strong>Метод ARE:</strong><br>
+                    1. <b>Anchor</b> (Якорь — общая ситуация)<br>
+                    2. <b>Reveal</b> (Раскрытие — ваш факт)<br>
+                    3. <b>Encourage</b> (Поощрение — вопрос)
+                </div>
+            </div>
+        </div>
+
+        <h2>🚫 Табу (О чем нельзя говорить)</h2>
+        <div class="theory-card" style="border-color: #ffc1c1;">
+            <span class="taboo-tag">Религия</span>
+            <span class="taboo-tag">Политика</span>
+            <span class="taboo-tag">Деньги</span>
+            <span class="taboo-tag">Здоровье</span>
+            <span class="taboo-tag">Критика</span>
+        </div>
+
+        <h2>💬 Кейс 1: На конференции</h2>
+        <div class="messenger-container">
+            <div class="chat-label">Сегодня</div>
+            <div class="bubble sent">
+                <span class="author-name">Вы</span>
+                Отличная презентация по нейросетям, правда? Я до сих пор под впечатлением от кейса с дизайном.
+            </div>
+            <div class="bubble received">
+                <span class="author-name">Собеседник</span>
+                Да, согласен! Особенно часть про автоматизацию.
+            </div>
+            <div class="bubble sent">
+                <span class="author-name">Вы</span>
+                Кстати, я Алексей, занимаюсь аналитикой в Fintech. А вы из какой сферы?
+            </div>
+        </div>
+
+        <h2>💬 Кейс 2: Перед Zoom-коллом</h2>
+        <div class="messenger-container">
+            <div class="bubble sent">
+                <span class="author-name">Вы</span>
+                Всем привет! Марк, вижу у тебя за окном солнце. Везет, у нас в Лондоне опять ливень 🌧️
+            </div>
+            <div class="bubble received">
+                <span class="author-name">Марк</span>
+                О, сегодня редкий удачный день для Берлина! А как у вас с погодой, коллеги?
+            </div>
+        </div>
+
+        <h2>💬 Кейс 3: У кофемашины</h2>
+        <div class="messenger-container">
+            <div class="bubble sent">
+                <span class="author-name">Вы</span>
+                Ох, этот кофе сегодня — мое единственное спасение. Неделя выдалась горячей, да? ☕
+            </div>
+            <div class="bubble received">
+                <span class="author-name">Коллега</span>
+                Не то слово! Жду субботу как праздник.
+            </div>
+            <div class="bubble sent">
+                <span class="author-name">Вы</span>
+                Уже есть планы на выходные или просто заслуженный отдых?
+            </div>
+        </div>
+    </main>
+
+    <div class="footer-nav">
+        <a href="index.html" class="next-btn">ПОНЯТНО</a>
+    </div>
+
+</body>
+</html>
