@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Lingo | Карта</title>
+    <style>
+        /* Стили остались без изменений */
+        :root {
+            --bg-color: #ffffff;
+            --text-main: #4b4b4b;
+            --color-completed: #58cc02;
+            --shadow-completed: #58a700;
+            --color-current: #1cb0f6;
+            --shadow-current: #1899d6;
+            --color-locked: #e5e5e5;
+            --shadow-locked: #cecece;
+            --text-locked: #afafaf;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        header {
+            width: 100%;
+            background-color: var(--bg-color);
+            padding: 20px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #e5e5e5;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        #app-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title {
+            margin-top: 40px;
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .roadmap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .node {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-size: 32px;
+            color: white;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            position: relative;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .node:active:not(.locked) {
+            transform: translateY(6px) !important;
+            box-shadow: 0 0 0 transparent !important;
+        }
+
+        .node.completed {
+            background-color: var(--color-completed);
+            box-shadow: 0 6px 0 var(--shadow-completed);
+        }
+
+        .node.current {
+            background-color: var(--color-current);
+            box-shadow: 0 6px 0 var(--shadow-current);
+            border: 4px solid #e5e5e5;
+            animation: pulse 2s infinite;
+        }
+
+        .node.locked {
+            background-color: var(--color-locked);
+            box-shadow: 0 6px 0 var(--shadow-locked);
+            color: var(--text-locked);
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .node:nth-child(odd) { transform: translateX(-40px); }
+        .node:nth-child(even) { transform: translateX(40px); }
+        .node:nth-child(4n+1) { transform: translateX(0px); }
+
+        .node:nth-child(odd):active:not(.locked) { transform: translate(-40px, 6px) !important; }
+        .node:nth-child(even):active:not(.locked) { transform: translate(40px, 6px) !important; }
+        .node:nth-child(4n+1):active:not(.locked) { transform: translate(0px, 6px) !important; }
+
+        .boss-node {
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 6px 0 var(--shadow-current), 0 0 0 0 rgba(28, 176, 246, 0.4); }
+            70% { box-shadow: 0 6px 0 var(--shadow-current), 0 0 0 15px rgba(28, 176, 246, 0); }
+            100% { box-shadow: 0 6px 0 var(--shadow-current), 0 0 0 0 rgba(28, 176, 246, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>💼 Business Lingo</header>
+
+    <div id="app-container">
+        <p style="margin-top: 50px; color: #888;">Загрузка данных с сервера...</p>
+    </div>
+
+    <script>
+        // Функция для запроса данных с Python-сервера
+        async function fetchRoadmap() {
+            try {
+                // Обращаемся к нашему локальному API
+                const response = await fetch('http://127.0.0.1:5000/api/roadmap');
+                if (!response.ok) throw new Error('Ошибка сети');
+                
+                const data = await response.json();
+                renderRoadmap(data);
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                document.getElementById('app-container').innerHTML = 
+                    '<p style="color: red; margin-top: 50px;">Не удалось подключиться к серверу Python. Убедитесь, что server.py запущен.</p>';
+            }
+        }
+
+        // Функция для отрисовки HTML на основе полученных JSON данных
+        function renderRoadmap(sections) {
+            const container = document.getElementById('app-container');
+            container.innerHTML = ''; // Очищаем текст "Загрузка..."
+
+            sections.forEach(section => {
+                // Создаем заголовок раздела
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'section-title';
+                titleDiv.textContent = section.title;
+                // Если раздел заблокирован, делаем текст серым
+                if (!section.is_active) {
+                    titleDiv.style.color = 'var(--text-locked)';
+                }
+                container.appendChild(titleDiv);
+
+                // Создаем контейнер для уроков (тропинку)
+                const roadmapDiv = document.createElement('div');
+                roadmapDiv.className = 'roadmap';
+
+                // Создаем кнопки уроков
+                section.lessons.forEach(lesson => {
+                    const node = document.createElement('a');
+                    // Если урок заблокирован, ссылка никуда не ведет
+                    node.href = lesson.status === 'locked' ? '#' : `lesson.html?id=${lesson.id}`;
+                    
+                    // Формируем классы: базовый 'node', статус и проверка на босса
+                    node.className = `node ${lesson.status}`;
+                    if (lesson.is_boss) {
+                        node.classList.add('boss-node');
+                    }
+                    
+                    node.textContent = lesson.icon;
+                    roadmapDiv.appendChild(node);
+                });
+
+                container.appendChild(roadmapDiv);
+            });
+        }
+
+        // Запускаем загрузку при открытии страницы
+        document.addEventListener('DOMContentLoaded', fetchRoadmap);
+    </script>
+</body>
+</html>
