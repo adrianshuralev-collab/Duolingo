@@ -156,6 +156,7 @@
         }
 
         // Функция для отрисовки HTML на основе полученных JSON данных
+                // Функция для отрисовки HTML на основе полученных JSON данных
         function renderRoadmap(sections) {
             const container = document.getElementById('app-container');
             container.innerHTML = ''; // Очищаем текст "Загрузка..."
@@ -165,23 +166,31 @@
                 const titleDiv = document.createElement('div');
                 titleDiv.className = 'section-title';
                 titleDiv.textContent = section.title;
-                // Если раздел заблокирован, делаем текст серым
+                
                 if (!section.is_active) {
                     titleDiv.style.color = 'var(--text-locked)';
                 }
                 container.appendChild(titleDiv);
 
-                // Создаем контейнер для уроков (тропинку)
                 const roadmapDiv = document.createElement('div');
                 roadmapDiv.className = 'roadmap';
 
                 // Создаем кнопки уроков
                 section.lessons.forEach(lesson => {
                     const node = document.createElement('a');
-                    // Если урок заблокирован, ссылка никуда не ведет
-                    node.href = lesson.status === 'locked' ? '#' : `lesson.html?id=${lesson.id}`;
                     
-                    // Формируем классы: базовый 'node', статус и проверка на босса
+                    // --- ЛОГИКА ПЕРЕХОДА ПО ССЫЛКЕ ---
+                    if (lesson.status === 'locked') {
+                        node.href = '#';
+                    } else if (lesson.id === 1) {
+                        // Если ID равен 1, идем на созданный файл урока
+                        node.href = 'small-talk1.html';
+                    } else {
+                        // Для остальных уроков стандартный путь
+                        node.href = `lesson.html?id=${lesson.id}`;
+                    }
+                    // --------------------------------
+                    
                     node.className = `node ${lesson.status}`;
                     if (lesson.is_boss) {
                         node.classList.add('boss-node');
@@ -190,6 +199,11 @@
                     node.textContent = lesson.icon;
                     roadmapDiv.appendChild(node);
                 });
+
+                container.appendChild(roadmapDiv);
+            });
+        }
+
 
                 container.appendChild(roadmapDiv);
             });
