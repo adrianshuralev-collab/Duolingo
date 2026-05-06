@@ -27,7 +27,19 @@ ROADMAP_DATA = [
             {"id": 7, "status": "locked", "icon": "🔒", "is_boss": False},
             {"id": 8, "status": "locked", "icon": "👑", "is_boss": True}
         ]
+    },
+    {
+        "section_id": 1,
+        "title": "Раздел 1: Small Talk",
+        "is_active": True,
+        "lessons": [
+            {"id": 1, "status": "completed", "icon": "⭐", "is_boss": False, "url": "small-talk1.html"},
+            {"id": 2, "status": "completed", "icon": "⭐", "is_boss": False, "url": "lesson.html?id=2"},
+            # ... и так далее
+        ]
     }
+]
+
 ]
 
 @app.route('/api/roadmap', methods=['GET'])
